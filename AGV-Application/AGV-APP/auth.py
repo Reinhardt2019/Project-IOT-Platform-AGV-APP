@@ -13,9 +13,9 @@ auth_bp = Blueprint(
 )
 
 
-@auth_bp.route('/login', methods=['GET', 'POST'])
-def login():
-    # Login route logic goes here
+@auth_bp.route('/signup', methods=['GET', 'POST'])
+def signup():
+    # Signup route logic goes here
     form = SignupForm()
     if form.validate_on_submit():
         # User sign-up logic
@@ -32,14 +32,14 @@ def login():
                 db.session.add(user)
                 db.session.commit()  # Create new user
                 login_user(user)  # Log in as newly created user
-                return redirect(url_for(''))  # TODO: ADD URL
+                return redirect(url_for('main_bp.dashboard'))  # TODO: ADD URL
             flash('username is already occupied.')
-    return render_template('')  # TODO: add template
+    return render_template('signup.html',form=form)  # TODO: add template
 
 
-@auth_bp.route('/signup', methods=['GET', 'POST'])
-def signup():
-    # Signup logic
+@auth_bp.route('/login', methods=['GET', 'POST'])
+def login():
+    # Login logic
     """
       Log-in page for registered users.
 
@@ -53,14 +53,14 @@ def signup():
     form = LoginForm()
     # Validate login attempt
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.username.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(password=form.password.data):
             login_user(user)
             next_page = request.args.get('next')
             return redirect(next_page or url_for('main_bp.dashboard'))
         flash('Invalid username/password combination')
         return redirect(url_for('auth_bp.login'))
-    return render_template('')  # TODO: add template
+    return render_template('login.html')  # TODO: add template
 
 
 @login_manager.user_loader

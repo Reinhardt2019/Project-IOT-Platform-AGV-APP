@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='AGV-APP',
-    packages=['AGV-APP'],
+    name='AGV-Application',
+    packages=['AGV-Application'],
     include_package_data=True,
     install_requires=[
         'flask',
