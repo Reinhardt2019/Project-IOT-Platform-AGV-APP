@@ -14,7 +14,7 @@ main_bp = Blueprint(
 @login_required
 def dashboard():
     """Logged-in User Dashboard."""
-    return render_template('') # TODO: add main template
+    return render_template('dashboard.html') # TODO: add main template
 
 
 @main_bp.route("/logout")
