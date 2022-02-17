@@ -6,7 +6,11 @@
 
 [Build Flask Apps](https://hackersandslackers.com/series/build-flask-apps/)
 
+[flask菜鸟教程](https://www.cainiaojc.com/flask/flask-tutorial.html)
+
 [flask-login](https://flask-login.readthedocs.io/en/latest/#installation)
+
+[flask-admin](https://flask-admin.readthedocs.io/en/latest/)
 
 
 ## Install Flask and extensions
