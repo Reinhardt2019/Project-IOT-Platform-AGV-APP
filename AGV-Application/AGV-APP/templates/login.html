@@ -6,6 +6,19 @@
 </head>
 <body>
  <h2 style = "text-align: center;">User Login</h2>
-
+       <form action = "/login" method = post>
+          <fieldset>
+             <legend>填写项</legend>
+             <div style = font-size:20px;>
+                {{ form.username.label }}<br>
+                {{ form.username }}
+                <br>
+                {{ form.password.label }}<br>
+                {{ form.password }}
+                <br>
+                {{ form.submit }}
+             </div>
+          </fieldset>
+       </form>
 </body>
 </html>

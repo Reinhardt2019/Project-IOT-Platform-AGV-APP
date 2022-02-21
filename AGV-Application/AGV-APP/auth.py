@@ -4,6 +4,8 @@ from . import login_manager
 from flask_login import login_required, logout_user, current_user, login_user
 from .forms import SignupForm, LoginForm
 from .models import db, User
+from flask_security.utils import hash_password
+
 
 # Blueprint Configuration
 auth_bp = Blueprint(
@@ -17,24 +19,28 @@ auth_bp = Blueprint(
 def signup():
     # Signup route logic goes here
     form = SignupForm()
+    #from . import user_database
     if form.validate_on_submit():
         # User sign-up logic
         if form.validate_on_submit():
             # check for username duplication
-            existing_user = User.query.filter_by(username=form.username.data).first()
+            #existing_user = User.query.filter_by(username=form.username.data).first()
             # create and register new user
-            if existing_user is None:
-                user = User(
-                    username=form.username.data,
-                    position=form.position.data,
-                )
-                user.set_password(form.password.data)
-                db.session.add(user)
-                db.session.commit()  # Create new user
-                login_user(user)  # Log in as newly created user
-                return redirect(url_for('main_bp.dashboard'))  # TODO: ADD URL
-            flash('username is already occupied.')
-    return render_template('signup.html',form=form)  # TODO: add template
+            #if existing_user is None:
+
+            # TODO: fix here
+            user_datastore.create_user(
+                id=100,
+                username=request.form.get('username'),
+                password=hash_password(request.form.get('password')),
+                position=request.form.get('position')
+            )
+            db.session.commit()  # Create new user
+                #login_user(user)  # Log in as newly created user
+            return redirect(url_for('auth_bp.login'))
+            #flash('username is already occupied.')
+
+    return render_template('signup.html',form=form)
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
@@ -60,7 +66,7 @@ def login():
             return redirect(next_page or url_for('main_bp.dashboard'))
         flash('Invalid username/password combination')
         return redirect(url_for('auth_bp.login'))
-    return render_template('login.html')  # TODO: add template
+    return render_template('login.html', form=form)
 
 
 @login_manager.user_loader
