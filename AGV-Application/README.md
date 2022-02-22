@@ -22,3 +22,10 @@ python3 setup.py install
 
 The application layout is constructed as suggested by [Flask Project Layout](https://flask.palletsprojects.com/en/2.0.x/tutorial/layout/). The account authentication is built following this [tutorial](https://hackersandslackers.com/flask-login-user-authentication/).
 
+## To Run The Application
+```
+cd Project-IOT-Plateform-AGV-APP/AGV-Application
+export FLASK_APP='AGV-APP'
+export FLASK_ENV=developing
+flask run
+```

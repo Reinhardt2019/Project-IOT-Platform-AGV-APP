@@ -1,8 +1,8 @@
 """Database models."""
 from . import db
 from flask_security import UserMixin, RoleMixin
-from werkzeug.security import generate_password_hash, check_password_hash
-
+from sqlalchemy_utils import UUIDType
+import uuid
 
 class RolesUsers(db.Model):
     __tablename__ = 'roles_users'
@@ -15,10 +15,13 @@ class User(UserMixin, db.Model):
     """User account model."""
 
     __tablename__ = 'user'
+    # an unique id generate by the application
     id = db.Column(
-        db.Integer,
+        UUIDType(binary=False),
+        default=uuid.uuid4,
         primary_key=True
     )
+    # user defined username, unique
     username = db.Column(
         db.String(100),
         nullable=False,

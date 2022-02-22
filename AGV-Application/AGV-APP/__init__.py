@@ -3,11 +3,13 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_security import Security, SQLAlchemyUserDatastore
+from .database import db
+from .models import User, Role
 
-db = SQLAlchemy()
-
-
+#db = SQLAlchemy()
 login_manager = LoginManager()
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+
 
 def create_app():
     """Construct the core app object."""
@@ -23,7 +25,6 @@ def create_app():
     with app.app_context():
         from . import routes
         from . import auth
-        from .models import User, Role
         from .forms import LoginForm
 
         # Register Blueprints
@@ -31,7 +32,6 @@ def create_app():
         app.register_blueprint(auth.auth_bp)
 
         # Initialize Security
-        user_datastore = SQLAlchemyUserDatastore(db, User, Role)
         security = Security(app, user_datastore, login_form=LoginForm)
 
         # Create Database Models
