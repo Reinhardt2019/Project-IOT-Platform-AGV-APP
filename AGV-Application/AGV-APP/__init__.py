@@ -1,12 +1,11 @@
 """Initialize app."""
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask,session
 from flask_login import LoginManager
 from flask_security import Security, SQLAlchemyUserDatastore
 from .database import db
 from .models import User, Role
+from datetime import timedelta
 
-#db = SQLAlchemy()
 login_manager = LoginManager()
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
@@ -27,6 +26,13 @@ def create_app():
         from . import auth
         from .forms import LoginForm
 
+        # Set timeout to auto-logout user for inactivity
+        @app.before_request
+        def before_request():
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(minutes=20)
+            session.modified = True
+
         # Register Blueprints
         app.register_blueprint(routes.main_bp)
         app.register_blueprint(auth.auth_bp)
@@ -38,3 +44,4 @@ def create_app():
         db.create_all()
 
         return app
+
