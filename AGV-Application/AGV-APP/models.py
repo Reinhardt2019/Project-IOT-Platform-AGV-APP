@@ -4,12 +4,6 @@ from flask_security import UserMixin, RoleMixin
 from sqlalchemy_utils import UUIDType
 import uuid
 
-class RolesUsers(db.Model):
-    __tablename__ = 'roles_users'
-    id = db.Column(db.Integer(), primary_key=True)
-    user_id = db.Column('user_id', db.Integer(), db.ForeignKey('user.id'))
-    role_id = db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
-
 
 class User(UserMixin, db.Model):
     """User account model."""
@@ -33,6 +27,7 @@ class User(UserMixin, db.Model):
         unique=False,
         nullable=False
     )
+    # TODO: change this field to be foreign key
     position = db.Column(
         db.String(200),
         primary_key=False,

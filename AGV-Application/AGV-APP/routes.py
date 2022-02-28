@@ -1,6 +1,6 @@
 """Logged-in page routes."""
 from flask import Blueprint, render_template, redirect, url_for, session
-from flask_security import current_user, login_required, logout_user
+from flask_security import current_user, login_required, logout_user, roles_accepted
 
 # Blueprint Configuration
 main_bp = Blueprint(
@@ -17,10 +17,16 @@ def dashboard():
     return render_template('dashboard.html')
 
 
-@main_bp.route("/logout")
+@main_bp.route('/logout')
 @login_required
 def logout():
     """User log-out logic."""
     session.pop('user_id', None)
     logout_user()
     return redirect(url_for('auth_bp.login'))
+
+
+@main_bp.route('/admin_page')
+@roles_accepted('admin')
+def admin_page():
+    return render_template('admin.html')

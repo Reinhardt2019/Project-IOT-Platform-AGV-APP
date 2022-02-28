@@ -26,14 +26,13 @@ def signup():
         # create and register new user
         if existing_user is None:
             session['user_id'] = uuid.uuid4()
-            user_datastore.create_user(
+            new_user = user_datastore.create_user(
                 id=session['user_id'],
                 username=request.form.get('username'),
                 password=hash_password(request.form.get('password')),
                 position=request.form.get('position')
             )
             db.session.commit()  # create new user
-            new_user = user_datastore.find_user(id=session['user_id'])
             # login new user
             login_user(new_user)
             # TODO: login redirection filtered by user type
