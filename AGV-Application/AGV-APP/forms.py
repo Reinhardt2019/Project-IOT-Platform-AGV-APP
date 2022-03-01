@@ -49,3 +49,29 @@ class LoginForm(FlaskForm):
     # TODO: add user type
 
     submit = SubmitField('Log In')
+
+
+class ForgotPasswordForm(FlaskForm):
+    """User Log-in Form."""
+    username = StringField(
+        'Username',
+        validators=[
+            DataRequired(),
+        ]
+    )
+    password = PasswordField(
+        'Password',
+        validators=[
+            DataRequired(),
+            Length(min=6, message='Select a stronger password.')
+        ]
+    )
+    confirm = PasswordField(
+        'Confirm Your Password',
+        validators=[
+            DataRequired(),
+            EqualTo('password', message='Passwords must match.')
+        ]
+    )
+
+    submit = SubmitField('Reset')

@@ -3,6 +3,7 @@ from . import db
 from flask_security import UserMixin, RoleMixin
 from sqlalchemy_utils import UUIDType
 import uuid
+import enum
 
 
 class User(UserMixin, db.Model):
@@ -27,9 +28,9 @@ class User(UserMixin, db.Model):
         unique=False,
         nullable=False
     )
-    # TODO: change this field to be foreign key
     position = db.Column(
         db.String(200),
+        db.ForeignKey('position.id'),
         primary_key=False,
         unique=True,
         nullable=False
@@ -52,3 +53,42 @@ class Role(RoleMixin, db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
+
+
+class Position(db.Model):
+    __tablename__ = 'position'
+    id = db.Column(db.Integer(), primary_key=True)
+    x = db.Column(db.Float())
+    y = db.Column(db.Float())
+    z = db.Column(db.Float())
+    w = db.Column(db.Float())
+
+
+class Merchandise(db.Model):
+    __tablename__ = 'merchandise'
+    id = db.Column(UUIDType(binary=False),
+                   default=uuid.uuid4,
+                   primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    type = db.Column(db.String(80))
+    description = db.Column(db.String(255))
+
+
+class OrderStatus(enum.Enum):
+    PENDING = 1
+    DELIVERING = 2
+    COMPLETED = 3
+    FAILED = 4
+
+
+class Order(db.Model):
+    __tablename__ = 'order'
+    id = db.Column(UUIDType(binary=False),
+                   default=uuid.uuid4,
+                   primary_key=True)
+    merchandise_id = db.Column(UUIDType(binary=False),
+                               db.ForeignKey('merchandise.id'),
+                               default=uuid.uuid4)
+    order_status = db.Column(db.Enum(OrderStatus))
+    ordered_time = db.Column(db.DateTime)
+    estimated_time = db.Column(db.Time)
