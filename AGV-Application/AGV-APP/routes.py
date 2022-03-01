@@ -17,6 +17,13 @@ def dashboard():
     return render_template('dashboard.html')
 
 
+# simulate a page that requires admin user-type
+@main_bp.route('/admin_page', methods=['GET'])
+@roles_accepted("admin")
+def admin_page():
+    return render_template('admin.html')
+
+
 @main_bp.route('/logout')
 @login_required
 def logout():
@@ -24,9 +31,3 @@ def logout():
     session.pop('user_id', None)
     logout_user()
     return redirect(url_for('auth_bp.login'))
-
-
-@main_bp.route('/admin_page')
-@roles_accepted('admin')
-def admin_page():
-    return render_template('admin.html')
