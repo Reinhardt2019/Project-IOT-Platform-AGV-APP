@@ -10,6 +10,8 @@ class Config:
     """Base config."""
 
     SECRET_KEY = environ.get('SECRET_KEY')
+    SECURITY_PASSWORD_SALT=environ.get('SECURITY_PASSWORD_SALT')
+    SECURITY_LOGIN_USER_TEMPLATE = environ.get('SECURITY_LOGIN_USER_TEMPLATE')
 
     # Database
     SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')

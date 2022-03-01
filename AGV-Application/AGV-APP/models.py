@@ -1,17 +1,21 @@
 """Database models."""
 from . import db
-from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_security import UserMixin, RoleMixin
+from sqlalchemy_utils import UUIDType
+import uuid
 
 
 class User(UserMixin, db.Model):
     """User account model."""
 
-    __tablename__ = 'flasklogin-users'
+    __tablename__ = 'user'
+    # an unique id generate by the application
     id = db.Column(
-        db.Integer,
+        UUIDType(binary=False),
+        default=uuid.uuid4,
         primary_key=True
     )
+    # user defined username, unique
     username = db.Column(
         db.String(100),
         nullable=False,
@@ -23,23 +27,28 @@ class User(UserMixin, db.Model):
         unique=False,
         nullable=False
     )
+    # TODO: change this field to be foreign key
     position = db.Column(
         db.String(200),
         primary_key=False,
         unique=True,
         nullable=False
     )
+    active = db.Column(
+        db.Boolean
+    )
+    confirmed_at = db.Column(
+        db.DateTime
+    )
+    roles = db.relationship(
+        'Role',
+        secondary='roles_users',
+        backref=db.backref('users', lazy='dynamic')
+    )
 
-    def set_password(self, password):
-        """Create hashed password."""
-        self.password = generate_password_hash(
-            password,
-            method='sha256'
-        )
 
-    def check_password(self, password):
-        """Check hashed password."""
-        return check_password_hash(self.password, password)
-
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
+class Role(RoleMixin, db.Model):
+    __tablename__ = 'role'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
