@@ -8,6 +8,10 @@ from datetime import timedelta
 import uuid
 from sqlalchemy_utils import UUIDType
 
+import rospy
+import threading
+from std_msgs.msg import String
+
 
 roles_users = db.Table('roles_users',
                        db.Column('user_id', UUIDType(binary=False), db.ForeignKey('user.id'), default=uuid.uuid4,),
@@ -16,6 +20,8 @@ roles_users = db.Table('roles_users',
 login_manager = LoginManager()
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
+threading.Thread(target=lambda: rospy.init_node('test_node', disable_signals=True)).start()
+pub = rospy.Publisher('/delivery_server/delivery', String, queue_size=1)
 
 def create_app():
     """Construct the core app object."""

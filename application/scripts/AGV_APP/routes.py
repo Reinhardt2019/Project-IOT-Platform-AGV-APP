@@ -1,6 +1,7 @@
 """Logged-in page routes."""
 from flask import Blueprint, render_template, redirect, url_for, session
 from flask_security import current_user, login_required, logout_user, roles_accepted
+from . import pub
 
 # Blueprint Configuration
 main_bp = Blueprint(
@@ -31,3 +32,10 @@ def logout():
     session.pop('user_id', None)
     logout_user()
     return redirect(url_for('auth_bp.login'))
+
+
+@main_bp.route('/pub')
+@login_required
+def publish():
+    pub.publish("message sent")
+    return redirect(url_for('main_bp.dashboard'))
