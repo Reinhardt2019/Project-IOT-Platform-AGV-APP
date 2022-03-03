@@ -2,7 +2,7 @@
 from flask import Blueprint, redirect, render_template, flash, request, session, url_for
 from . import login_manager, user_datastore
 from flask_login import login_required, logout_user, current_user
-from .forms import SignupForm, LoginForm
+from .forms import SignupForm, LoginForm, ForgotPasswordForm
 from .models import db, User
 from flask_security.utils import hash_password, login_user, verify_and_update_password
 import uuid
@@ -73,6 +73,22 @@ def login():
         flash('Invalid username/password combination')
         return redirect(url_for('auth_bp.login'))
     return render_template('login.html', form=form)
+
+
+@auth_bp.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if current_user.is_authenticated:
+        return redirect(url_for('main_bp.dashboard'))
+
+    form = ForgotPasswordForm()
+    # Validate login attempt
+    if form.validate_on_submit():
+        user = user_datastore.find_user(username=form.username.data)
+        user.password = hash_password(request.form.get('password'))
+        user_datastore.put(user)
+        db.session.commit()
+        return redirect(url_for('main_bp.dashboard'))
+    return render_template('forgot_password.html', form=form)
 
 
 @login_manager.user_loader

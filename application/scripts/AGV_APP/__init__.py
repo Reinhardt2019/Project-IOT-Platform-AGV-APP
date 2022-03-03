@@ -8,6 +8,10 @@ from datetime import timedelta
 import uuid
 from sqlalchemy_utils import UUIDType
 
+import rospy
+import threading
+from std_msgs.msg import String
+
 
 roles_users = db.Table('roles_users',
                        db.Column('user_id', UUIDType(binary=False), db.ForeignKey('user.id'), default=uuid.uuid4,),
@@ -16,6 +20,8 @@ roles_users = db.Table('roles_users',
 login_manager = LoginManager()
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
+threading.Thread(target=lambda: rospy.init_node('test_node', disable_signals=True)).start()
+pub = rospy.Publisher('/delivery_server/delivery', String, queue_size=1)
 
 def create_app():
     """Construct the core app object."""
@@ -31,14 +37,18 @@ def create_app():
     with app.app_context():
         from . import routes
         from . import auth
-        from .forms import LoginForm
+        from .forms import LoginForm,ForgotPasswordForm
 
         # Register Blueprints
         app.register_blueprint(routes.main_bp)
         app.register_blueprint(auth.auth_bp)
 
-        # Initialize Security
-        security = Security(app, user_datastore, login_form=LoginForm)
+        # Initialize Security and override forms
+        security = Security(app,
+                            user_datastore,
+                            login_form=LoginForm,
+                            forgot_password_form=ForgotPasswordForm
+                            )
 
         # Create Database Models
         db.create_all()

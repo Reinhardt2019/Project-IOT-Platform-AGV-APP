@@ -1,0 +1,3 @@
+<launch>
+  <node name='flask_ros_server' type='wsgi.py' pkg='application' output='screen'/>
+</launch>
