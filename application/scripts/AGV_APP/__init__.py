@@ -3,25 +3,31 @@ from flask import Flask, session
 from flask_login import LoginManager
 from flask_security import Security, SQLAlchemyUserDatastore
 from .database import db
-from .models import User, Role
+from .models import User, Role, UserOrderModel, Order, Merchandise
 from datetime import timedelta
 import uuid
 from sqlalchemy_utils import UUIDType
+from .utils.datastore import OrderDatastore, MerchandiseManager
 
+'''
 import rospy
 import threading
 from std_msgs.msg import String
 
-
+'''
 roles_users = db.Table('roles_users',
-                       db.Column('user_id', UUIDType(binary=False), db.ForeignKey('user.id'), default=uuid.uuid4,),
+                       db.Column('user_id', UUIDType(binary=False), db.ForeignKey('user.id'), default=uuid.uuid4, ),
                        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
 login_manager = LoginManager()
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-
+order_datastore = OrderDatastore(db, User, UserOrderModel, Order)
+merchandise_manager = MerchandiseManager(db, Merchandise)
+'''
 threading.Thread(target=lambda: rospy.init_node('test_node', disable_signals=True)).start()
 pub = rospy.Publisher('/delivery_server/delivery', String, queue_size=1)
+'''
+
 
 def create_app():
     """Construct the core app object."""
@@ -35,13 +41,13 @@ def create_app():
     login_manager.init_app(app)
 
     with app.app_context():
-        from . import routes
-        from . import auth
-        from .forms import LoginForm,ForgotPasswordForm
+        from . import routes, auth, order
+        from .forms import LoginForm, ForgotPasswordForm
 
         # Register Blueprints
         app.register_blueprint(routes.main_bp)
         app.register_blueprint(auth.auth_bp)
+        app.register_blueprint(order.order_bp)
 
         # Initialize Security and override forms
         security = Security(app,
@@ -72,6 +78,11 @@ def create_app():
             if not admin_user.has_role(admin_role):
                 user_datastore.add_role_to_user(admin_user, admin_role)
                 db.session.commit()
+            ''' FOR TESTING ONLY'''
+            merchandise_manager.find_or_add_merchandise('Ice Tea', id=uuid.uuid4())
+            merchandise_manager.find_or_add_merchandise('Coke', id=uuid.uuid4())
+            merchandise_manager.find_or_add_merchandise('Coffee', id=uuid.uuid4())
+            db.session.commit()
 
         # Set timeout to auto-logout user for inactivity
         @app.before_request

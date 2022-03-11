@@ -1,11 +1,13 @@
 """Routes for user authentication."""
 from flask import Blueprint, redirect, render_template, flash, request, session, url_for
-from . import login_manager, user_datastore
+from . import login_manager, user_datastore, order_datastore
 from flask_login import login_required, logout_user, current_user
 from .forms import SignupForm, LoginForm, ForgotPasswordForm
 from .models import db, User
 from flask_security.utils import hash_password, login_user, verify_and_update_password
 import uuid
+import datetime
+
 
 # Blueprint Configuration
 auth_bp = Blueprint(
@@ -30,8 +32,10 @@ def signup():
                 id=session['user_id'],
                 username=request.form.get('username'),
                 password=hash_password(request.form.get('password')),
-                position=request.form.get('position')
+                position=request.form.get('position'),
+                confirmed_at=datetime.date.today()
             )
+            order_datastore.create_user_order_store(new_user)
             db.session.commit()  # create new user
             # login new user
             login_user(new_user)

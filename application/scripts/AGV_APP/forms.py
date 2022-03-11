@@ -75,3 +75,21 @@ class ForgotPasswordForm(FlaskForm):
     )
 
     submit = SubmitField('Reset')
+
+
+class OrderForm(FlaskForm):
+    """User Order Form."""
+    merchandise_name = StringField(
+        'Merchandise Name',
+        validators=[DataRequired()]
+    )
+    submit = SubmitField('Order')
+
+
+class ConfirmForm(FlaskForm):
+    """User Order Form."""
+    merchandise_name = StringField(
+        'Merchandise Name',
+        validators=[DataRequired()]
+    )
+    submit = SubmitField('Confirm')

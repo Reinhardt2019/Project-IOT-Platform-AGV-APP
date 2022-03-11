@@ -1,6 +1,9 @@
 """Database models."""
+from sqlalchemy.orm import backref, relationship
+
 from . import db
-from flask_security import UserMixin, RoleMixin
+from flask_security import RoleMixin
+from .utils.datastore import UserMixin
 from sqlalchemy_utils import UUIDType
 import uuid
 import enum
@@ -46,6 +49,9 @@ class User(UserMixin, db.Model):
         secondary='roles_users',
         backref=db.backref('users', lazy='dynamic')
     )
+    order_store = db.relationship(
+        'UserOrderModel', backref=backref("user", uselist=False), lazy=True,uselist=False
+    )
 
 
 class Role(RoleMixin, db.Model):
@@ -70,8 +76,10 @@ class Merchandise(db.Model):
                    default=uuid.uuid4,
                    primary_key=True)
     name = db.Column(db.String(80), unique=True)
+    '''
     type = db.Column(db.String(80))
     description = db.Column(db.String(255))
+    '''
 
 
 class OrderStatus(enum.Enum):
@@ -90,5 +98,32 @@ class Order(db.Model):
                                db.ForeignKey('merchandise.id'),
                                default=uuid.uuid4)
     order_status = db.Column(db.Enum(OrderStatus))
+
     ordered_time = db.Column(db.DateTime)
+    '''
     estimated_time = db.Column(db.Time)
+    '''
+
+
+class UserOrderModel(db.Model):
+    __tablename__ = 'user_order'
+    user_id = db.Column(
+        UUIDType(binary=False),
+        db.ForeignKey('user.id'),
+        default=uuid.uuid4,
+        primary_key=True
+    )
+    orderable = db.Column(
+        db.Boolean
+    )
+    current_order = db.Column(UUIDType(binary=False),
+                              db.ForeignKey('order.id'),
+                              default=uuid.uuid4,
+                              primary_key=True,
+                              nullable=True
+                              )
+    '''
+    order_history = db.relationship(
+        'Order', backref='user_order', lazy=True
+    )
+    '''
