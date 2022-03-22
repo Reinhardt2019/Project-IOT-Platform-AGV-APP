@@ -32,7 +32,7 @@ def signup():
                 id=session['user_id'],
                 username=request.form.get('username'),
                 password=hash_password(request.form.get('password')),
-                position=request.form.get('position'),
+                position_id=request.form.get('position'),
                 confirmed_at=datetime.date.today()
             )
             order_datastore.create_user_order_store(new_user)

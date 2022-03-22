@@ -3,11 +3,12 @@ from flask import Flask, session
 from flask_login import LoginManager
 from flask_security import Security, SQLAlchemyUserDatastore
 from .database import db
-from .models import User, Role, UserOrderModel, Order, Merchandise
+from .models import User, Role, UserOrderModel, Order, Merchandise, Position
 from datetime import timedelta
 import uuid
 from sqlalchemy_utils import UUIDType
 from .utils.datastore import OrderDatastore, MerchandiseManager
+from application.srv import *
 
 '''
 import rospy
@@ -23,10 +24,10 @@ login_manager = LoginManager()
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 order_datastore = OrderDatastore(db, User, UserOrderModel, Order)
 merchandise_manager = MerchandiseManager(db, Merchandise)
-'''
+
+
 threading.Thread(target=lambda: rospy.init_node('test_node', disable_signals=True)).start()
-pub = rospy.Publisher('/delivery_server/delivery', String, queue_size=1)
-'''
+service = rospy.ServiceProxy('delivery', ClientPose)
 
 
 def create_app():
@@ -72,17 +73,24 @@ def create_app():
             # Add the unique admin account if not created
             admin_user = user_datastore.find_user(username="admin")
             if admin_user is None:
-                admin_user = user_datastore.create_user(id=uuid.uuid4(), username="admin", password="admin", position=0)
+                admin_user = user_datastore.create_user(id=uuid.uuid4(), username="admin", password="admin")
                 db.session.commit()
             # Add admin role to the unique account
             if not admin_user.has_role(admin_role):
                 user_datastore.add_role_to_user(admin_user, admin_role)
                 db.session.commit()
-            ''' FOR TESTING ONLY'''
+            ' --------- FOR TESTING ONLY ------------- '
             merchandise_manager.find_or_add_merchandise('Ice Tea', id=uuid.uuid4())
             merchandise_manager.find_or_add_merchandise('Coke', id=uuid.uuid4())
             merchandise_manager.find_or_add_merchandise('Coffee', id=uuid.uuid4())
+            '''
+            position_1 = Position(id=1, x=5.0, y=0, z=0, w=1)
+            position_2 = Position(id=2, x=-5.0, y=0, z=0, w=1)
+            db.session.add(position_1)
+            db.session.add(position_2)
+            '''
             db.session.commit()
+            ' -------- END OF TESTING Data ------------ '
 
         # Set timeout to auto-logout user for inactivity
         @app.before_request

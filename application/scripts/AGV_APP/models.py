@@ -3,7 +3,7 @@ from sqlalchemy.orm import backref, relationship
 
 from . import db
 from flask_security import RoleMixin
-from .utils.datastore import UserMixin
+from .utils.mixin import UserMixin
 from sqlalchemy_utils import UUIDType
 import uuid
 import enum
@@ -31,12 +31,16 @@ class User(UserMixin, db.Model):
         unique=False,
         nullable=False
     )
-    position = db.Column(
-        db.String(200),
+    position_id = db.Column(
+        db.Integer(),
         db.ForeignKey('position.id'),
-        primary_key=False,
-        unique=True,
-        nullable=False
+        nullable=True
+    )
+    position = db.relationship(
+        'Position',
+        backref=backref("user", uselist=False),
+        lazy=True,
+        uselist=False
     )
     active = db.Column(
         db.Boolean
@@ -48,9 +52,6 @@ class User(UserMixin, db.Model):
         'Role',
         secondary='roles_users',
         backref=db.backref('users', lazy='dynamic')
-    )
-    order_store = db.relationship(
-        'UserOrderModel', backref=backref("user", uselist=False), lazy=True,uselist=False
     )
 
 
@@ -113,6 +114,12 @@ class UserOrderModel(db.Model):
         default=uuid.uuid4,
         primary_key=True
     )
+    user = db.relationship(
+        'User',
+        backref=backref("order_store", uselist=False),
+        lazy=True,
+        uselist=False
+    )
     orderable = db.Column(
         db.Boolean
     )
@@ -122,6 +129,7 @@ class UserOrderModel(db.Model):
                               primary_key=True,
                               nullable=True
                               )
+
     '''
     order_history = db.relationship(
         'Order', backref='user_order', lazy=True
