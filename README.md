@@ -44,7 +44,7 @@ python3 run wsgi.py
 
  
 ## 整体软件框架
-![structure.PNG](https://boostnote.io/api/teams/WmnRSGIQi/files/adca410813c23473fdaad528bd91ba11562e4bcc1257bc6a4a069e4f26e35a4d-structure.PNG)
+![structure](https://user-images.githubusercontent.com/49314691/161005721-c77ac9d7-cbef-4246-b065-da58469952b2.PNG)
 
 ## 数据库设计
 需要注册账号：
@@ -55,9 +55,10 @@ python3 run wsgi.py
 ## 软件功能
 ### 已开发功能
 #### class UML
-![UML.PNG](https://boostnote.io/api/teams/WmnRSGIQi/files/fd30a7e1b7a11ee7ea1c5feeb13b4cf498c5e6c8196d742b1b89570377d06194-UML.PNG)
+![UML](https://user-images.githubusercontent.com/49314691/161005683-c9bf8b03-e9e2-42f0-af02-a79801b80e3c.PNG)
 
 相关文件集合在utils文件夹中，代码注释中已标注功能及参数类型。开发以上utils类的目的是为程序提供数据库接口，避免在app代码中重复使用底层函数，如`model.query.filter_by().first()`等。在后续开发中，如遇到类似场景，应考虑开发新的类集成datastore，或在已有的类中添加新的函数，避免代码重复。
 ### 未开发功能
-![future plan.PNG](https://boostnote.io/api/teams/WmnRSGIQi/files/809f66820137867d885e119829f2a8227b3c0f70776539296ca9d933b9e62413-future%20plan.PNG)
+
+![future plan](https://user-images.githubusercontent.com/49314691/161005735-6fc1f120-2b35-4626-bf0e-faac8243a999.PNG)
 及SWD中提及的其他功能
