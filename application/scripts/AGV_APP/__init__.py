@@ -26,6 +26,7 @@ order_datastore = OrderDatastore(db, User, UserOrderModel, Order)
 merchandise_manager = MerchandiseManager(db, Merchandise)
 position_manager = PositionManager(db, Position)
 
+# initialize ROS in a separate thread
 threading.Thread(target=lambda: rospy.init_node('test_node', disable_signals=True)).start()
 service = rospy.ServiceProxy('delivery', ClientPose)
 
