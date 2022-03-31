@@ -1,5 +1,3 @@
-
-
 class Datastore(object):
     """
     A Class with SQLAlchemy interfaces
@@ -193,3 +191,71 @@ class MerchandiseManager(Datastore):
         merchandise.num = int
     
     '''
+
+
+class PositionManager(Datastore):
+    '''
+    A SQLAlchemy datastore implementation for managing position information
+
+    '''
+
+    def __init__(self, db, position_model):
+        Datastore.__init__(self, db)
+        self.position_model = position_model
+
+    def find_origin(self):
+        return self.position_model.query.filter_by(id=0).first()
+
+    def find_position(self, id):
+        '''
+        Find a position in the database
+        Parameter:
+            id: integer
+        Return:
+            None
+        '''
+        return self.position_model.query.filter_by(id=id).first()
+
+    def add_new_position(self, **kwargs):
+        '''
+        Add a position to the database
+        Parameter:
+            **kwargs: keyword arguments
+                attributes that accord with the Position model
+        Return:
+            The new position inserted to the database
+        '''
+        position = self.position_model(**kwargs)
+        position = self.put(position)
+        return position
+
+    def find_or_add_position(self, id, **kwargs):
+        '''
+        Find a position based on given ID. Create a new one if such position is not found.
+        Parameters:
+            id: integer
+                the ID of target position
+            **kwargs: keyword arguments
+                attributes that accord with the Position model
+        Return:
+            The target position
+
+        '''
+        kwargs["id"] = id
+        return self.find_position(id) or self.add_new_position(**kwargs)
+
+    def change_position(self, position, **kwargs):
+        '''
+        Change the information for given position
+        Parameters:
+            position: position model
+                the position model
+            **kwargs: keyword arguments
+                attributes that accord with the Position model, containing new values
+        Return:
+            the position model values of which has been changed.
+        '''
+        for key, value in kwargs.items():
+            position[key] = value
+        self.put(position)
+        return position

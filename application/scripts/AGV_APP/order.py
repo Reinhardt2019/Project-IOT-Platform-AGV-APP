@@ -5,10 +5,10 @@ from flask_login import login_required, current_user
 from .models import db, Order, OrderStatus, Position
 import uuid, queue
 from .forms import OrderForm, ConfirmForm
-from . import order_datastore, merchandise_manager, service
-
+from . import order_datastore, merchandise_manager, service, position_manager
 
 order_queue = queue.Queue()
+agv_occupied = False
 
 # Blueprint Configuration
 order_bp = Blueprint(
@@ -54,9 +54,12 @@ def confirm_order():
     form = ConfirmForm()
     if request.method == 'POST':
         order_datastore.change_current_order_status(current_user, OrderStatus.COMPLETED)
+        order_datastore.change_user_order_status(current_user, True)
         db.session.commit()
+        publish_goal(position_manager.find_origin())
         return redirect(url_for('main_bp.dashboard'))
     goal = current_user.position
+    publish_goal(goal)
     return render_template('confirm_order.html', form=form)  # TODO: Add a button for confirm
 
 
@@ -100,6 +103,8 @@ def change_order():
     return render_template('create_order.html', form=form)
 
 
+# TODO: implement the following function or find alternatives to achieve similar functionality
+'''
 def order_manager():
     while True:
         while not order_queue.empty():
@@ -109,18 +114,20 @@ def order_manager():
             while current_order.status == OrderStatus.DELIVERING:
                 continue
             print("current order added")
+'''
 
 
-def publish_goal(x, y, z, w):
+def publish_goal(goal):
     '''
     A method that call for delivery service in ROS
+    Parameters:
+        goal: position model
+            a position model that contains coordinates
+    Returns:
+        if the delivery navigation is successfully conducted by ROS
     '''
-
-
     try:
-        return service(x, y, z, w).succeed
+        return service(goal.x, goal.y, goal.z, goal.w).succeed
     except rospy.ServiceException as e:
         print("Service call failed: %s" % e)
-
-    # print("The position is "+x+y+z+w)
-    # return True
+        return False

@@ -18,6 +18,12 @@ class UserMixin(BaseUserMixin):
         id = self.order_store.current_order
         return id
 
+    def get_current_position(self):
+        """
+        return the linked position of the user
+        """
+        return self.position
+
     '''
     TODO: implement this function
     def get_order_history(self):

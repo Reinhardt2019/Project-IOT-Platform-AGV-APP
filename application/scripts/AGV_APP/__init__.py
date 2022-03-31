@@ -7,15 +7,15 @@ from .models import User, Role, UserOrderModel, Order, Merchandise, Position
 from datetime import timedelta
 import uuid
 from sqlalchemy_utils import UUIDType
-from .utils.datastore import OrderDatastore, MerchandiseManager
+from .utils.datastore import OrderDatastore, MerchandiseManager, PositionManager
 from application.srv import *
 
-'''
+
 import rospy
 import threading
 from std_msgs.msg import String
 
-'''
+
 roles_users = db.Table('roles_users',
                        db.Column('user_id', UUIDType(binary=False), db.ForeignKey('user.id'), default=uuid.uuid4, ),
                        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
@@ -24,7 +24,7 @@ login_manager = LoginManager()
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 order_datastore = OrderDatastore(db, User, UserOrderModel, Order)
 merchandise_manager = MerchandiseManager(db, Merchandise)
-
+position_manager = PositionManager(db, Position)
 
 threading.Thread(target=lambda: rospy.init_node('test_node', disable_signals=True)).start()
 service = rospy.ServiceProxy('delivery', ClientPose)
@@ -79,16 +79,14 @@ def create_app():
             if not admin_user.has_role(admin_role):
                 user_datastore.add_role_to_user(admin_user, admin_role)
                 db.session.commit()
-            ' --------- FOR TESTING ONLY ------------- '
+            # The position of water bar
+            store_position = position_manager.find_or_add_position(0,x=0,y=0,z=0,w=1)
+            ' --------- ADD TESTING DATA ------------- '
             merchandise_manager.find_or_add_merchandise('Ice Tea', id=uuid.uuid4())
             merchandise_manager.find_or_add_merchandise('Coke', id=uuid.uuid4())
             merchandise_manager.find_or_add_merchandise('Coffee', id=uuid.uuid4())
-            '''
-            position_1 = Position(id=1, x=5.0, y=0, z=0, w=1)
-            position_2 = Position(id=2, x=-5.0, y=0, z=0, w=1)
-            db.session.add(position_1)
-            db.session.add(position_2)
-            '''
+            position_manager.find_or_add_position(1, x=5.0, y=0, z=0, w=1)
+            position_manager.find_or_add_position(2, x=-5.0, y=0, z=0, w=1)
             db.session.commit()
             ' -------- END OF TESTING Data ------------ '
 
