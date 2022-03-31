@@ -1,1 +1,63 @@
-# Project-IOT-Platform-AGV-APP
+# Project-IOT-Platform-AGV-APP： Auto-Move 
+## 参考资料 (很重要很重要很重要)
+
+1.  [Flask Document](https://flask.palletsprojects.com/en/2.1.x/)
+2.  [Flask页面蓝图](https://flask.palletsprojects.com/en/2.1.x/tutorial/views/)
+3. 项目文件架构: [ROS架构](http://wiki.ros.org/ROS/Tutorials/NavigatingTheFilesystem), [Flask Application Factory](https://flask.palletsprojects.com/en/2.1.x/patterns/appfactories/)
+4. [Flask 菜鸟教程](https://www.cainiaojc.com/flask/flask-tutorial.html)
+5. [Flask-Security](https://pythonhosted.org/Flask-Security/index.html)
+6. 数据库：[SQLAlchemy](https://docs.sqlalchemy.org/en/20/index.html), [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
+7. 相关教程：[login](https://hackersandslackers.com/flask-login-user-authentication/)
+
+## 运行APP
+### 安装ROS 
+参照ROS教程
+### 创建workspace
+
+```
+mkdir -p Project-IOT-Platform-AGV-APP/src
+cd Project-IOT-Platform-AGV-APP/src
+git clone git@github.com:Reinhardt2019/Project-IOT-Platform-AGV-APP.git
+```
+### 安装Python依赖包
+```
+cd Project-IOT-Platform-AGV-APP/application/scripts
+python3 setup.py build
+python3 setup.py install
+```
+### 编译ROS
+```
+cd Project-IOT-Platform-AGV-APP
+catkin_make
+. devel/setup.bash
+```
+## 运行APP
+### 运行Flask与ROS
+```
+ros launch application start_server.launch
+```
+### 单独运行Flask
+需要删除程序中与ROS相关的代码
+```
+python3 run wsgi.py
+```
+
+ 
+## 整体软件框架
+![structure.PNG](https://boostnote.io/api/teams/WmnRSGIQi/files/adca410813c23473fdaad528bd91ba11562e4bcc1257bc6a4a069e4f26e35a4d-structure.PNG)
+
+## 数据库设计
+需要注册账号：
+[lucidchart](https://lucid.app/lucidchart/d2323f50-abc5-4ffb-a262-2baed325204b/edit?invitationId=inv_c0acda29-5079-4a02-9d8d-55d0ff28b3d4)
+
+## [软件设计文档](https://siemens.sharepoint.com/:w:/r/teams/IOTPlatformAGVRobot/Shared%20Documents/01%20Docs%EF%BC%88All%EF%BC%89/Phase%2002-Output%2001-AGV%20APP%20(All)/01%20Implement%20Docs%20(All)/03%20Design/02%20SWD/20220208%20QiaoGuanlun%20SunQingyi%20SWD.docx?d=w196f71135a534d619e2721d5624b0532&csf=1&web=1&e=bGq8bd)
+
+## 软件功能
+### 已开发功能
+#### class UML
+![UML.PNG](https://boostnote.io/api/teams/WmnRSGIQi/files/fd30a7e1b7a11ee7ea1c5feeb13b4cf498c5e6c8196d742b1b89570377d06194-UML.PNG)
+
+相关文件集合在utils文件夹中，代码注释中已标注功能及参数类型。开发以上utils类的目的是为程序提供数据库接口，避免在app代码中重复使用底层函数，如`model.query.filter_by().first()`等。在后续开发中，如遇到类似场景，应考虑开发新的类集成datastore，或在已有的类中添加新的函数，避免代码重复。
+### 未开发功能
+![future plan.PNG](https://boostnote.io/api/teams/WmnRSGIQi/files/809f66820137867d885e119829f2a8227b3c0f70776539296ca9d933b9e62413-future%20plan.PNG)
+及SWD中提及的其他功能
