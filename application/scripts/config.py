@@ -14,6 +14,7 @@ class Config:
     SECURITY_LOGIN_USER_TEMPLATE = environ.get('SECURITY_LOGIN_USER_TEMPLATE')
 
     # Database
-    SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')
+    # SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + "/home/ysxsiemens/Project-IOT-Platform-AGV-APP/src/Project-IOT-Platform-AGV-APP/application/scripts/AGV_APP/db.sqlite3"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
