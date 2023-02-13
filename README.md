@@ -25,7 +25,7 @@ cd Project-IOT-Platform-AGV-APP/application/scripts
 python3 setup.py build
 python3 setup.py install
 ```
-### 编译ROS
+### 编译ROS（虚拟机端）
 ```
 cd Project-IOT-Platform-AGV-APP
 catkin_make
@@ -33,8 +33,13 @@ catkin_make
 ```
 ## 运行APP
 ### 运行Flask与ROS
+运行APP时，先ssh登录小车，在AGV端输入如下指令打开AGV端服务器
 ```
-ros launch application start_server.launch
+roslaunch delivery_navigation delivery.launch 
+```
+再使用继续在虚拟机端运行
+```
+roslaunch application start_server.launch
 ```
 ### 单独运行Flask
 若想在本地单独运行Flask，建议使用Ubuntu中的pycharm
@@ -47,11 +52,13 @@ from application.srv import *
 import rospy
 import threading
 from std_msgs.msg import String
+```
 line 30：
+```
 threading.Thread(target=lambda: rospy.init_node('test_node', disable_signals=True)).start()
 service = rospy.ServiceProxy('delivery', ClientPose)
 ```
-order.py
+order.py:
 line 8：
 ```
 from . import order_datastore, merchandise_manager, service, position_manager中去掉service
@@ -67,7 +74,9 @@ python3 run wsgi.py
 
 ## 数据库设计
 文件运行后会自动连接AGV_APP/db.sqlite3数据库，若在该路径下无此文件，会自动创建，路径配置在config.py文件。
+
 由于时间有限，目前配置为当前虚拟机的绝对路径，若用其他虚拟机运行需要更改路径，后续开发过程中可以尝试改成相对路径
+
 运行程序会对其初始化，初始化详细内容见models.py
 
 需要注册账号：
