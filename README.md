@@ -37,7 +37,26 @@ catkin_make
 ros launch application start_server.launch
 ```
 ### 单独运行Flask
-需要删除程序中与ROS相关的代码
+若想在本地单独运行Flask，建议使用Ubuntu中的pycharm
+需要注释程序中与ROS相关的代码，如下：
+
+__init__.py:
+line 11：
+```
+from application.srv import *
+import rospy
+import threading
+from std_msgs.msg import String
+line 30：
+threading.Thread(target=lambda: rospy.init_node('test_node', disable_signals=True)).start()
+service = rospy.ServiceProxy('delivery', ClientPose)
+```
+order.py
+line 8：
+```
+from . import order_datastore, merchandise_manager, service, position_manager中去掉service
+```
+运行wsgi.py
 ```
 python3 run wsgi.py
 ```
@@ -47,6 +66,10 @@ python3 run wsgi.py
 ![structure](https://user-images.githubusercontent.com/49314691/161005721-c77ac9d7-cbef-4246-b065-da58469952b2.PNG)
 
 ## 数据库设计
+文件运行后会自动连接AGV_APP/db.sqlite3数据库，若在该路径下无此文件，会自动创建，路径配置在config.py文件。
+由于时间有限，目前配置为当前虚拟机的绝对路径，若用其他虚拟机运行需要更改路径，后续开发过程中可以尝试改成相对路径
+运行程序会对其初始化，初始化详细内容见models.py
+
 需要注册账号：
 [lucidchart](https://lucid.app/lucidchart/d2323f50-abc5-4ffb-a262-2baed325204b/edit?invitationId=inv_c0acda29-5079-4a02-9d8d-55d0ff28b3d4)
 
