@@ -13,4 +13,4 @@ dist/
 build/
 *.egg-info/
 
-AGV_APP/db.sqlite3
+/home/ysxsiemens/Project-IOT-Platform-AGV-APP/src/Project-IOT-Platform-AGV-APP/application/scripts/AGV_APP/db.sqlite3
