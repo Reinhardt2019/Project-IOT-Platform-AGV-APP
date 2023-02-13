@@ -96,3 +96,8 @@ python3 run wsgi.py
 
 ![future plan](https://user-images.githubusercontent.com/49314691/161005735-6fc1f120-2b35-4626-bf0e-faac8243a999.PNG)
 及SWD中提及的其他功能
+
+### 注意
+1.小车刚开机时需要一段时间初始化并连接网络，出现ssh: connect to host 10.20.240.247 port 22: No route to host属于正常现象，等待即可
+
+2.只有在数据库order表中订单completed后，才可下达下一个订单
