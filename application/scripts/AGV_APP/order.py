@@ -6,6 +6,7 @@ from .models import db, Order, OrderStatus, Position
 import uuid, queue
 from .forms import OrderForm, ConfirmForm
 from . import order_datastore, merchandise_manager, service, position_manager
+# from . import order_datastore, merchandise_manager,position_manager
 
 order_queue = queue.Queue()
 agv_occupied = False
