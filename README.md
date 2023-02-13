@@ -45,7 +45,8 @@ roslaunch application start_server.launch
 若想在本地单独运行Flask，建议使用Ubuntu中的pycharm
 需要注释程序中与ROS相关的代码，如下：
 
-__init__.py:
+#### __init__.py:
+
 line 11：
 ```
 from application.srv import *
@@ -58,7 +59,8 @@ line 30：
 threading.Thread(target=lambda: rospy.init_node('test_node', disable_signals=True)).start()
 service = rospy.ServiceProxy('delivery', ClientPose)
 ```
-order.py:
+#### order.py:
+
 line 8：
 ```
 from . import order_datastore, merchandise_manager, service, position_manager中去掉service
