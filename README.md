@@ -32,7 +32,9 @@ sudo docker ps
 sudo docker stop +CONTAINER ID
 ```
 #### 运行docker（如果在win安装）
-按照GitHub指南安装（https://github.com/cruise-automation/webviz）
+[按照GitHub指南安装](https://github.com/cruise-automation/webviz)
+
+https://github.com/cruise-automation/webviz
 
 ## 参考资料 (很重要很重要很重要)
 
