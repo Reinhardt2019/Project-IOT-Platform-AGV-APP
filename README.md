@@ -45,7 +45,7 @@ sudo docker stop +CONTAINER ID
 5. [Flask-Security](https://pythonhosted.org/Flask-Security/index.html)
 6. 数据库：[SQLAlchemy](https://docs.sqlalchemy.org/en/20/index.html), [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
 7. 相关教程：[login](https://hackersandslackers.com/flask-login-user-authentication/)
-
+8. 导航可视化: [webviz](https://webviz.io/)
 ## 运行APP
 ### 安装ROS 
 参照ROS教程
