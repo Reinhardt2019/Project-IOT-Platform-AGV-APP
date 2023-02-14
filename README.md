@@ -15,7 +15,7 @@ roslaunch rosbridge_server rosbridge_websocket.launch
 ### 第一次使用时需要运行webviz对应docker镜像
 
 #### 运行docker（如果在虚拟机安装）
-https://blog.csdn.net/weixin_43134049/article/details/124476759
+[相关教程](https://blog.csdn.net/weixin_43134049/article/details/124476759)
 
 ```
 sudo docker run -p 8080:8080 cruise/webviz
@@ -34,7 +34,7 @@ sudo docker stop +CONTAINER ID
 #### 运行docker（如果在win安装）
 [按照GitHub指南安装](https://github.com/cruise-automation/webviz)
 
-https://github.com/cruise-automation/webviz
+
 
 ## 参考资料 (很重要很重要很重要)
 
