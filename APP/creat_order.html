@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>下单</title>
+    <!-- <script src="js/vue.js"></script> -->
+    <link rel="stylesheet" href="css/createorder.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <input name="username" v-model="username" >
+        {{username}}
+    </div>
+    <!-- 整个页面 -->
+    <div class="w">
+        <header class="header">
+          
+        </header>
+        <!-- 头部结束 -->
+        <!-- 用户登录框 -->
+        <main class="main">
+            <!-- <div class="backimg"></div> -->
+        <div class="window"> 
+            <iframe src="http://localhost:8080/?rosbridge-websocket-url=ws://10.20.240.247:9090" width="800px" height="450px" frameborder="0" scrolling="no"></iframe>
+        </div>
+    </div>
+           
+            
+            <!-- </form> -->
+            <div class="clear"></div>
+        </main>
+        <!-- 登录框结束 -->
+    </div>
+</body>
+
+<script>
+new Vue({
+    el: "#app",
+    data() {
+        return {
+            username: ""
+        }
+    }
+});
+</script>
+</html>
