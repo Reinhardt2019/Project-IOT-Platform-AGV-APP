@@ -1,6 +1,6 @@
 # Project-IOT-Platform-AGV-APP： Auto-Move 
 
-该分支在Project-IOT-Platform-AGV-APP/application/scripts/AGV_APP/templates/APP/上传了基于Axure的Demo（详见网盘资料）搭建的一部分前端网页，目前仅制作了登录页及下单页的雷达图实时显示。目前前端是基于HTML/CSS搭建，可以使用vs code等软件打开文件夹并运行HTML。后续开发过程中，需要按照Project-IOT-Platform-AGV-APP/application/scripts/AGV_APP/templates路径下的网页，将网页中的表单与flask默认的表单输入方式进行匹配，并且与后端程序连接，把其他功能陆续实现。
+该分支上传了基于Axure的Demo（详见网盘资料）搭建的一部分前端网页，目前仅制作了登录页及下单页的雷达图实时显示。目前前端是基于HTML/CSS搭建，可以使用vs code等软件打开文件夹并运行HTML。后续开发过程中，需要按照Project-IOT-Platform-AGV-APP/application/scripts/AGV_APP/templates路径下的网页，将网页中的表单与flask默认的表单输入方式进行匹配，并且与后端程序连接，把其他功能陆续实现。
 
 ## 雷达实时显示功能需要打开rosbridge并运行docker
 
